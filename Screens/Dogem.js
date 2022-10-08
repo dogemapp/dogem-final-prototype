@@ -41,7 +41,7 @@ const App = () => {
     const sendSMS = async () => {
  //     for(let i = 0; i <= 5; i++) {
       const {result} = await SMS.sendSMSAsync(
-        ['chloechungcs@gmail.com', '4704612228'],
+        ['[enteranemail]@gmail.com', '[phonenumberhere]'],
         'YOURE BEING DOGGED'
       );
       console.log(result);
