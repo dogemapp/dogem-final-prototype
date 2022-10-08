@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //REPORT:
 //I found online a way to make phone calls, send messages using react-native-communications. Wouldn't work so I had to import
 //different components for each type of operation.
@@ -6,6 +6,11 @@ import React, { useState } from 'react';
 //You'll need to install react-native-sms and react-native-phone-call to make it work using npm install in the CLI. 
 
 // import all the components we are going to use
+
+//10/7 update: I added expo-sms for texting
+//it CAN send texts, but it requires user intervention which is a major flaw
+//To-do: find out if we can hit the send button programatically. 
+import * as SMS from 'expo-sms';
 import {
     SafeAreaView,
     StyleSheet,
@@ -15,107 +20,78 @@ import {
     TextInput,
 } from 'react-native';
 
-// Here I imported the SMS and Call component. I found a video using the react-native component but never worked
-
-
-
 
 const App = () => {
-    const [mobileNumber, setMobileNumber] = useState('');
-    const [bodySMS, setBodySMS] = useState();
-
-    /*
-    const initiateSMS = () => {
-        // Checking if it has 10 digits
-        if (mobileNumber.length != 10) {
-            alert('Please insert correct contact number');
-            return;
-        }
-        //Function to send messages
-        SendSMS.send(
-            {
-                // Message body
-                body: bodySMS,
-                // Recipients Number
-                recipients: [mobileNumber],
-                // Triggering a complete response on Android
-                successTypes: ['sent', 'queued'],
-            },
-            (completed, cancelled, error) => {
-                if (completed) {
-                    console.log('SMS Sent Completed');
-                } else if (cancelled) {
-                    console.log('SMS Sent Cancelled');
-                } else if (error) {
-                    console.log('Some error occured');
-                }
-            },
-        );
+    const [isAvailable, setIsAvailable] = useState(false);
+    const [mobileNumber, setMobileNumber] = useState(undefined);
+    const [bodySMS, setBodySMS] = useState(undefined);
+  
+  
+    useEffect(() => {
+      async function checkAvailability() {
+        const isSmsAvailable = await SMS.isAvailableAsync();
+        setIsAvailable(isSmsAvailable);
+      }
+      checkAvailability();
+    }, []);
+  
+  /* MESSENGER
+  IT CAN LOOP, BUT TO-DO: GET IT TO AUTO-SEND
+  */  
+    const sendSMS = async () => {
+ //     for(let i = 0; i <= 5; i++) {
+      const {result} = await SMS.sendSMSAsync(
+        ['chloechungcs@gmail.com', '4704612228'],
+        'YOURE BEING DOGGED'
+      );
+      console.log(result);
+ //     }
     };
-
-    const triggerCall = () => {
-        const args = {
-            number: mobileNumber,
-            prompt: true,
-            //Not asking the user for authorization. Made the program crash on 'false'
-            skipCanOpen: true
-
-        };
-        //Making the phone call
-        call(args).catch(console.error);
-    };
-*/
-
-
+  
+  
     return (
 
-        <SafeAreaView style={styles.container}>
-            <View style={styles.container}>
-                <Text style={styles.titleText}>
-                    DogEm
-                </Text>
-                {/*Taking the phone number from the user*/}
-                <Text style={styles.titleTextsmall}>Enter Mobile Number</Text>
-                <TextInput
-                    value={mobileNumber}
-                    onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)}
-                    placeholder={'Enter Contact Number'}
-                    keyboardType="numeric"
-                    style={styles.textInput}
-                />
-                {/*Entering the SMS Body to send*/}
-                <Text style={styles.titleTextsmall}>Enter SMS body</Text>
-                <TextInput
-                    value={bodySMS}
-                    onChangeText={(bodySMS) => setBodySMS(bodySMS)}
-                    placeholder={'Enter SMS Body'}
-                    keyboardType="numeric"
-                    style={styles.textInput}
-                />
-                {/*Send Message Button. calling the function initiateSMS on touch*/}
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.buttonStyle}
-                    onPress={initiateSMS}>
-                    <Text style={styles.buttonTextStyle}>Send Message</Text>
-                </TouchableOpacity>
-                {/*Phone Call Button. Calling the function triggerCall on press*/}
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.buttonStyle}
-                    onPress={triggerCall}>
-                    <Text style={styles.buttonTextStyle}>Phone Call</Text>
-                </TouchableOpacity>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
+                    <Text style={styles.titleText}>
+                        DogEm
+                    </Text>
+                   {/*Taking the phone number from the user*/}
 
+                    <Text style={styles.titleTextsmall}>Enter Mobile Number</Text>
+                   <TextInput
+                        value={mobileNumber}
+                        onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)}
+                        placeholder={'Enter Contact Number'}
+                        keyboardType="numeric"
+                        style={styles.textInput} 
+                    />
+ 
+    
+                   {/*Entering the SMS Body to send*/} 
+    
 
+                    <Text style={styles.titleTextsmall}>Enter SMS body</Text>
+                    <TextInput
+                        value={bodySMS}
+                        onChangeText={(bodySMS) => setBodySMS(bodySMS)}
+                        placeholder={'Enter SMS Body'}
+                        keyboardType="numeric"
+                        style={styles.textInput}
+                    />
 
+                    {/*Send Message Button. calling the function initiateSMS on touch*/}
 
-
-            </View>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonStyle}
+                        onPress={sendSMS}>
+                        <Text style={styles.buttonTextStyle}>Send Message</Text>
+                    </TouchableOpacity>
+                    </View>
         </SafeAreaView>
     );
-};
-
+  }
 
 export default App;
 
