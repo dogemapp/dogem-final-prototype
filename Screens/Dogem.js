@@ -39,13 +39,13 @@ const App = () => {
   IT CAN LOOP, BUT TO-DO: GET IT TO AUTO-SEND
   */  
     const sendSMS = async () => {
-//      for(let i = 0; i <= 5; i++) {
+      for(let i = 0; i <= 5; i++) {
       const {result} = await SMS.sendSMSAsync(
         ['[enteranemail]@gmail.com', '[phonenumberhere]'],
         'YOURE BEING DOGGED'
       );
       console.log(result);
-//      }
+     }
     };
   
   
