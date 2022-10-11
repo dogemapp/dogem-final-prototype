@@ -1,125 +1,100 @@
-import React, { useState } from 'react';
-//REPORT:
-//I found online a way to make phone calls, send messages using react-native-communications. Wouldn't work so I had to import
-//different components for each type of operation.
-//I had to stop coding since we switched to Expo GL, and see if I can implement my code there and what would chande. 
-//You'll need to install react-native-sms and react-native-phone-call to make it work using npm install in the CLI. 
-
-// import all the components we are going to use
+import * as React from 'react';
+import {useEffect, useState} from 'react';
+//import * as Linking from 'expo-linking';
+import * as SMS from 'expo-sms';
 import {
-    SafeAreaView,
-    StyleSheet,
-    View,
-    Text,
-    TouchableOpacity,
-    TextInput,
+  StyleSheet,
+  StatusBar,
+  Text,
+  View,
+  Image,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Platform,
 } from 'react-native';
-
-// Here I imported the SMS and Call component. I found a video using the react-native component but never worked
-
-
-
-
-const App = () => {
-    const [mobileNumber, setMobileNumber] = useState('');
-    const [bodySMS, setBodySMS] = useState();
-
-    /*
-    const initiateSMS = () => {
-        // Checking if it has 10 digits
-        if (mobileNumber.length != 10) {
-            alert('Please insert correct contact number');
-            return;
-        }
-        //Function to send messages
-        SendSMS.send(
-            {
-                // Message body
-                body: bodySMS,
-                // Recipients Number
-                recipients: [mobileNumber],
-                // Triggering a complete response on Android
-                successTypes: ['sent', 'queued'],
-            },
-            (completed, cancelled, error) => {
-                if (completed) {
-                    console.log('SMS Sent Completed');
-                } else if (cancelled) {
-                    console.log('SMS Sent Cancelled');
-                } else if (error) {
-                    console.log('Some error occured');
-                }
-            },
-        );
-    };
-
-    const triggerCall = () => {
-        const args = {
-            number: mobileNumber,
-            prompt: true,
-            //Not asking the user for authorization. Made the program crash on 'false'
-            skipCanOpen: true
-
-        };
-        //Making the phone call
-        call(args).catch(console.error);
-    };
+/*CODE FOR THE DOGEM SCREEN
+Components:
+- DogEm title text
+- "Enter mobile number" prompt
+- Field for numbers or emails
+- "Enter SMS body" prompt
+- Field for the message
+- Send Message button
+- Phone Call button
 */
-
-
+const App = () => {
+    const [isAvailable, setIsAvailable] = useState(false);
+    const [phoneNum, setPhoneNum] = useState(undefined);
+    const [message, setMessage] = useState(undefined);
+  
+    useEffect(() => {
+      async function checkAvailability() {
+        const isSmsAvailable = await SMS.isAvailableAsync();
+        setIsAvailable(isSmsAvailable);
+      }
+      checkAvailability();
+    }, []);
+  
+  /* MESSENGER */  
+  
+    const sendSMS = async () => {
+      const {result} = await SMS.sendSMSAsync(
+        ['[enteremail]@email.com', '[enterotheremail]@email.com', '1112223333', '2223334444'],
+        'YOURE BEING DOGGED'
+      );
+      console.log(result);
+    };
+  
     return (
-
-        <SafeAreaView style={styles.container}>
-            <View style={styles.container}>
-                <Text style={styles.titleText}>
-                    DogEm
-                </Text>
-                {/*Taking the phone number from the user*/}
-                <Text style={styles.titleTextsmall}>Enter Mobile Number</Text>
-                <TextInput
-                    value={mobileNumber}
-                    onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)}
-                    placeholder={'Enter Contact Number'}
-                    keyboardType="numeric"
-                    style={styles.textInput}
-                />
-                {/*Entering the SMS Body to send*/}
-                <Text style={styles.titleTextsmall}>Enter SMS body</Text>
-                <TextInput
-                    value={bodySMS}
-                    onChangeText={(bodySMS) => setBodySMS(bodySMS)}
-                    placeholder={'Enter SMS Body'}
-                    keyboardType="numeric"
-                    style={styles.textInput}
-                />
-                {/*Send Message Button. calling the function initiateSMS on touch*/}
-                <TouchableOpacity
+  
+      <View style={styles.container}>
+        <Text style={styles.titleText}> DogEm </Text>
+        
+        <View style={styles.inputView}>
+        <Text style={styles.titleTextsmall}>Enter Mobile Number</Text>
+          <TextInput
+            style={styles.TextInput}
+            value={phoneNum}
+            placeholder="Enter Contact Number"
+            placeholderTextColor="#003f5c"
+            onChangeText={(value) => setPhoneNum(value)}
+          />
+        </View>
+  
+        <View style={styles.inputView}>
+        <Text style={styles.titleTextsmall}>Enter SMS body</Text>
+          <TextInput
+            style={styles.TextInput}
+            value={message}
+            placeholder="Enter SMS Body"
+            placeholderTextColor="#003f5c"
+            onChangeText={(value) => setMessage(value)}
+          />
+         </View>
+        
+         <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.buttonStyle}
-                    onPress={initiateSMS}>
+                    onPress={sendSMS}>
                     <Text style={styles.buttonTextStyle}>Send Message</Text>
                 </TouchableOpacity>
-                {/*Phone Call Button. Calling the function triggerCall on press*/}
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.buttonStyle}
-                    onPress={triggerCall}>
-                    <Text style={styles.buttonTextStyle}>Phone Call</Text>
-                </TouchableOpacity>
 
-
-
-
-
-            </View>
-        </SafeAreaView>
+          <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonStyle}>
+          <Text style={styles.buttonTextStyle}>Phone Call</Text>
+          </TouchableOpacity>
+      </View>
     );
-};
+  }
+  
+  /* This is where all the styling is: */  
+  
+  const styles = StyleSheet.create({
 
-
-export default App;
-
-const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
@@ -146,12 +121,54 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
     },
-    textInput: {
+    TextInput: {
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
         width: '100%',
         paddingHorizontal: 10,
     },
-});
+   
+    forgot_button: {
+      height: 30,
+      marginTop: 10,
+      marginBottom: 20,
+    },
+  
+    edit_contact_button: {
+      height: 30,
+      marginTop: 10,
+      marginBottom: 20,
+    },
 
+    titleText: {
+        marginBottom: 15,
+        fontSize: 32,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#000080',
+     //   fontFamily: "Impact,Charcoal,sans-serif",
+    },
+
+    scrollView: {
+      width: '100%',
+      alignSelf: 'center',
+      borderRightWidth: 1,
+      padding: 0,
+    },
+  
+    contentContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  
+    regularText: {
+      color: 'red',
+      marginBottom: 10,
+      alignItems: "center",
+      fontWeight: "bold",
+      maxWidth: "100%",
+    },
+  });
+  
+  export default App;
