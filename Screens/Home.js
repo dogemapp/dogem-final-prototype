@@ -11,8 +11,9 @@ import {
     Image,
 } from "react-native";
 
+
 const App = ({navigation })=> {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     return (
@@ -25,8 +26,8 @@ const App = ({navigation })=> {
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.TextInput}
-                    placeholder="Username"
-                    onChangeText={(username) => setUsername(username)}
+                    placeholder="Example@email.com"
+                    onChangeText={(email) => setEmail(email)}
                 />
             </View>
 
@@ -53,6 +54,7 @@ const App = ({navigation })=> {
     );
 }
 export default App;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

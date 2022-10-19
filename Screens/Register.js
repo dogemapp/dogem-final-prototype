@@ -1,7 +1,25 @@
-import React from 'react';
+import {React, useState} from 'react';
 import { Button, FlatList, StyleSheet, Text, View, Alert, TouchableOpacity, TextInput} from 'react-native';
-    
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from './Database_config/Firebase';
+
 const Register = ({ navigation }) => {
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignUp = () =>{
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredentials) =>{
+                // Signed in
+                const user = userCredentials.user;
+                alert("Registration Success")
+            })
+            // .catch((error) => alert("Error Occured : Regitration Failed"))
+            .catch((error) => alert(error.message))
+    };
+
     return (
         <View style={styles.container}>
             {/* <Text style={styles.titleText}>
@@ -12,30 +30,29 @@ const Register = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder = 'First Name'
+                onChangeText={(fname) => setFname(fname)}
                 />
             <Text style = {styles.dogText}>   Last Name: *</Text>
             <TextInput
                 style={styles.input}
                 placeholder = 'Last Name'
+                onChangeText={(lname) => setLname(lname)}
                 />
             <Text style = {styles.dogText}>   Email: *</Text>
             <TextInput
                 style={styles.input}
                 placeholder = 'Example@email.com'
-                />
-            <Text style = {styles.dogText}>   Username: *</Text>
-            <TextInput
-                style={styles.input}
-                placeholder = 'Username'
+                onChangeText={(email) => setEmail(email)}
                 />
             <Text style = {styles.dogText}>   Password: *</Text>
             <TextInput
                 style={styles.input}
                 placeholder = 'Password'
+                onChangeText={(password) => setPassword(password)}
                 />
                 
-            <TouchableOpacity style={styles.registerBtn} onPress={() => Alert.alert('Registration Success')}>
-                <Text style={styles.registerBtn_text}>Register</Text>
+            <TouchableOpacity style={styles.registerBtn} onPress={handleSignUp}>
+                <Text style={styles.registerBtn_text}>REGISTER</Text>
             </TouchableOpacity>
         </View>
     );

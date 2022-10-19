@@ -17,7 +17,6 @@ const App = ({navigation })=> {
     const [lname, setLname] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     return (
 
@@ -55,7 +54,7 @@ const App = ({navigation })=> {
             />
 
             <TouchableOpacity style={styles.contactBtn} onPress={() => Alert.alert('Contact Added')}>
-                <Text style={styles.loginText}>Add Contact</Text>
+                <Text style={styles.loginText}>ADD CONTACT</Text>
             </TouchableOpacity>
         </View>
     );
