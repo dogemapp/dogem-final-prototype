@@ -26,7 +26,7 @@ const App = ({navigation })=> {
             const user = userCredentials.user;
             navigation.replace('Login')
         })
-        .catch((error) => alert("Login Failed : Incorrect Username and Password"))
+        .catch((error) => alert("Login Failed : Incorrect Email and Password"))
         //.catch((error) => alert(error.message))
     }
 
