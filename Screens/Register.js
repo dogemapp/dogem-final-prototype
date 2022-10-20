@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useEffect, useState} from 'react';
 import { Button, FlatList, StyleSheet, Text, View, Alert, TouchableOpacity, TextInput} from 'react-native';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from './Database_config/Firebase';
@@ -9,6 +9,7 @@ const Register = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    // function to handle the registration of a user to the Database
     const handleSignUp = () =>{
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredentials) =>{
@@ -16,8 +17,8 @@ const Register = ({ navigation }) => {
                 const user = userCredentials.user;
                 alert("Registration Success")
             })
-            // .catch((error) => alert("Error Occured : Regitration Failed"))
-            .catch((error) => alert(error.message))
+            .catch((error) => alert("Error Occured : Regitration Failed"))
+            // .catch((error) => alert(error.message))
     };
 
     return (
