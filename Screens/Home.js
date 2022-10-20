@@ -10,24 +10,22 @@ import {
     TouchableOpacity,
     Image,
 } from "react-native";
-import { signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
 import { auth } from './Database_config/Firebase';
-import { useNavigation } from '@react-navigation/native';
 
-
-const App = ({navigation })=> {
+const App = ({navigation})=> {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () =>{
         signInWithEmailAndPassword(auth, email, password)
-        .then((userCredentials) =>{
-            // Signed in
-            const user = userCredentials.user;
-            navigation.replace('Login')
-        })
-        .catch((error) => alert("Login Failed : Incorrect Email and Password"))
-        //.catch((error) => alert(error.message))
+            .then((userCredentials) =>{
+                // Signed in
+                const user = userCredentials.user;
+                navigation.replace('Login')
+            })
+            .catch((error) => alert("Login Failed : Incorrect Email and Password"))
+            //.catch((error) => alert(error.message))
     }
 
     return (
