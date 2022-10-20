@@ -50,12 +50,12 @@ const Login = ({ navigation }) => {
             {/* <TouchableOpacity style={styles.contactBtn} onPress={() => navigation.navigate('Contact')}>
                 <Text  style={styles.dogText}>Add Contact</Text>
             </TouchableOpacity> */}
-        
-            <TouchableOpacity style={styles.DogemBtn} onPress={() => navigation.navigate('Dogem')}>
-                <Text style={styles.dogText}>DOGEM</Text>
-            </TouchableOpacity>
+            <View style={styles.btnView}>
+                <TouchableOpacity style={styles.DogemBtn} onPress={() => navigation.navigate('Dogem')}>
+                    <Text style={styles.dogText}>DOGEM</Text>
+                </TouchableOpacity>
 
-            <View style={styles.logOutView}>
+            
                 <TouchableOpacity style={styles.logOutBtn} onPress={handleLogOut}>
                     <Text style={styles.logOutText}>LOGOUT</Text>
                 </TouchableOpacity>
@@ -86,12 +86,12 @@ const styles = StyleSheet.create({
         color: '#000080',
     },
     DogemBtn: {
-        width: "40%",
+        width: "50%",
         height: 50,
         alignItems: "center",
         justifyContent: "center",
         // marginTop: 10,
-        marginLeft: 90,
+        // marginLeft: 90,
         backgroundColor: "#1035AC",
         borderRadius: 5
 
@@ -100,16 +100,16 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontSize:20,
     },
-    contactBtn:{
-        width: "50%",
-        height: 50,
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: 40,
-        marginLeft: 90,
-        backgroundColor: "#1035AC",
-        borderRadius: 5
-    },
+    // contactBtn:{
+    //     width: "50%",
+    //     height: 50,
+    //     alignItems: "center",
+    //     justifyContent: "center",
+    //     marginTop: 40,
+    //     marginLeft: 90,
+    //     backgroundColor: "#1035AC",
+    //     borderRadius: 5
+    // },
     logOutBtn: {
         width: "80%",
         borderRadius: 25,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     logOutText: {
         color: "#ffffff",
     },
-    logOutView:{
+    btnView:{
         alignItems: "center",
     }
 })
