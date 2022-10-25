@@ -122,6 +122,7 @@ const App = () => {
 
          <Text>Contacts:</Text>
          {showContacts()}
+         <Text style={styles.forgot_button} onPress={() => setContacts([])}>Clear Contacts</Text>
         
          <TouchableOpacity
                     activeOpacity={0.7}
