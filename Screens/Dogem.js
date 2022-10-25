@@ -29,6 +29,7 @@ const App = () => {
     const [isAvailable, setIsAvailable] = useState(false);
     const [phoneNum, setPhoneNum] = useState(undefined);
     const [message, setMessage] = useState(undefined);
+    const [contacts, setContacts] = useState([]);
   
     useEffect(() => {
       async function checkAvailability() {
@@ -38,15 +39,50 @@ const App = () => {
       checkAvailability();
     }, []);
   
-  /* MESSENGER */  
-  
+  /* sendSMS does a lot of heavy-lifting for the messaging function. 
+    It establishes a message limit, it auto-fills the message's fields with 
+    the user's contacts list and the message they entered, and it returns the 
+    status of the message. 
+    */
     const sendSMS = async () => {
-      const {result} = await SMS.sendSMSAsync(
-        ['[enteremail]@email.com', '[enterotheremail]@email.com', '1112223333', '2223334444'],
-        'YOURE BEING DOGGED'
+      for(let messageLimit=1; messageLimit<=5; messageLimit++) {
+        const {result} = await SMS.sendSMSAsync(
+        contacts,
+        message
       );
       console.log(result);
+      }
     };
+    
+    /* addContact is an array of the user's contacts. */
+    const addContact = () => {
+      /*
+      newContacts is a clone of the setContacts array. 
+      newContacts is set to something called the spread operator.
+      The spread operator "..." is a handy tool for making an 
+      exact copy of an existing array.
+      */
+      let newContacts = [...contacts];
+      newContacts.push(phoneNum);
+      setContacts(newContacts);
+      setPhoneNum(undefined);
+    };
+
+    const showContacts = () => {
+      if (contacts.length === 0) {
+        return <Text>No contacts added!</Text>
+      }
+  
+      return contacts.map((contact, index) => {
+        return <Text key={index}>{contact}</Text>;
+      });
+    };
+  
+      /* The calling function uses the following:
+    _pressCall: Opens the user's default calling app using Linking
+    and calls the number that the user entered into the "Enter Mobile Number"
+    field.
+    */ 
   const _pressCall = () => {
         Linking.openURL(`tel:${phoneNum}`);
     }
@@ -54,9 +90,10 @@ const App = () => {
     return (
   
       <View style={styles.container}>
+      <ScrollView>
         <Text style={styles.titleText}> DogEm </Text>
         <Image 
-        style={{ width: 425, height: 300 }}
+        style={{ width: 300, height: 212 }}
         source={require("./Images/logo.jpg")} 
         /> 
 
@@ -69,6 +106,7 @@ const App = () => {
             placeholderTextColor="#003f5c"
             onChangeText={(value) => setPhoneNum(value)}
           />
+        <Text style={styles.forgot_button} onPress={addContact}>Add Contact</Text>
         </View>
   
         <View style={styles.inputView}>
@@ -81,6 +119,9 @@ const App = () => {
             onChangeText={(value) => setMessage(value)}
           />
          </View>
+
+         <Text>Contacts:</Text>
+         {showContacts()}
         
          <TouchableOpacity
                     activeOpacity={0.7}
@@ -95,6 +136,7 @@ const App = () => {
           onPress={_pressCall}>
           <Text style={styles.buttonTextStyle}>Phone Call</Text>
           </TouchableOpacity>
+          </ScrollView>
       </View>
     );
   }

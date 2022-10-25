@@ -18,9 +18,10 @@ const App = ({navigation })=> {
     return (
 
         <View style={styles.container}>
-            <Text style={styles.titleText}>
-                DogEm
-            </Text>
+        <Image 
+        style={{ width: 193, height: 218, marginBottom: 5 }}
+        source={require("./Images/mergeddogemtransparent.png")} 
+        />
             
             <View style={styles.inputView}>
                 <TextInput
