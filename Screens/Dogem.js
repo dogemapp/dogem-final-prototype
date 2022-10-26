@@ -18,10 +18,14 @@ import {
 /*CODE FOR THE DOGEM SCREEN
 Components:
 - DogEm title text
+- DogEm photo
 - "Enter mobile number" prompt
 - Field for numbers or emails
+- "Add contact" button, which adds the numbers/emails to the contacts array
 - "Enter SMS body" prompt
 - Field for the message
+- List of entered contacts "Contacts:"
+- "Clear Contacts" button
 - Send Message button
 - Phone Call button
 */
@@ -30,7 +34,21 @@ const App = () => {
     const [phoneNum, setPhoneNum] = useState(undefined);
     const [message, setMessage] = useState(undefined);
     const [contacts, setContacts] = useState([]);
+
+    /*
+    The messaging function uses:
+    1. checkAvailability
+    2. sendSMS
+    3. addContact
+    4. showContacts
+    */
   
+
+    /*
+    checkAvailability is for the messaging function.
+    It checks to see if expo-sms can open the device's 
+    default messaging app.
+    */
     useEffect(() => {
       async function checkAvailability() {
         const isSmsAvailable = await SMS.isAvailableAsync();
@@ -39,10 +57,17 @@ const App = () => {
       checkAvailability();
     }, []);
   
-  /* sendSMS does a lot of heavy-lifting for the messaging function. 
-    It establishes a message limit, it auto-fills the message's fields with 
-    the user's contacts list and the message they entered, and it returns the 
-    status of the message. 
+    /* 
+    sendSMS does a lot of heavy-lifting for the messaging function.
+    1. for-loop: Its loop variable is messageLimit because we're using it to establish
+       a messaging limit for the user. 
+    2. SMS.sendSMSAsync is an expo-sms method that accepts an array of contact information 
+       (which in our case is contacts) and a string message to be sent (in our case it is named
+        message)
+    3. it auto-fills the default messaging app's message's fields with the user's 
+    contacts list and the message they entered
+    4. result prints to the console. It returns the status of the message, which is 
+       "cancelled", "sent", or "unknown".
     */
     const sendSMS = async () => {
       for(let messageLimit=1; messageLimit<=5; messageLimit++) {
@@ -54,20 +79,32 @@ const App = () => {
       }
     };
     
-    /* addContact is an array of the user's contacts. */
+    /* 
+    addContact is an array of the user's contacts.  
+    1. newContacts is a clone of the setContacts array. 
+       newContacts is set to something called the spread operator.
+       The spread operator "..." is a handy tool for making an 
+       exact copy of an existing array.
+    2. newContacts.push(phonenum) what this line does is it pushes
+       the phoneNum the user entered into the text field into
+       the newContacts array.
+    3. setContacts adds the contacts array to newContacts.
+    4. Then reset phoneNum.
+    */
     const addContact = () => {
-      /*
-      newContacts is a clone of the setContacts array. 
-      newContacts is set to something called the spread operator.
-      The spread operator "..." is a handy tool for making an 
-      exact copy of an existing array.
-      */
       let newContacts = [...contacts];
       newContacts.push(phoneNum);
       setContacts(newContacts);
       setPhoneNum(undefined);
     };
 
+    /*
+    showContacts's purpose is to show what the user entered in the field
+    corresponding with contact info. 
+    1. If nothing is entered, it shows that no contacts were added.
+    2. It displays them using .map, which is a method for displaying/traversing
+       a component's similar objects.
+    */
     const showContacts = () => {
       if (contacts.length === 0) {
         return <Text>No contacts added!</Text>
@@ -78,13 +115,16 @@ const App = () => {
       });
     };
   
-      /* The calling function uses the following:
-    _pressCall: Opens the user's default calling app using Linking
-    and calls the number that the user entered into the "Enter Mobile Number"
-    field.
+     /* 
+    The calling function uses the following:
+    1. _pressCall: Opens the user's default calling app using Linking
+       and calls the number that the user entered into the "Enter Mobile Number"
+       field.
+    2. addContact
+    3. showContacts
     */ 
   const _pressCall = () => {
-        Linking.openURL(`tel:${phoneNum}`);
+        Linking.openURL(`tel:${contacts}`);
     }
   
     return (
