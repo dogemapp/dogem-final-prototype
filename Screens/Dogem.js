@@ -34,6 +34,7 @@ const App = () => {
     const [phoneNum, setPhoneNum] = useState(undefined);
     const [message, setMessage] = useState(undefined);
     const [contacts, setContacts] = useState([]);
+    const [usageLimit, setUsageLimit] = useState([]);
 
     /*
     The messaging function uses:
@@ -70,7 +71,7 @@ const App = () => {
        "cancelled", "sent", or "unknown".
     */
     const sendSMS = async () => {
-      for(let messageLimit=1; messageLimit<=5; messageLimit++) {
+      for(let messageLimit=1; messageLimit<=usageLimit; messageLimit++) {
         const {result} = await SMS.sendSMSAsync(
         contacts,
         message
@@ -136,6 +137,17 @@ const App = () => {
         style={{ width: 300, height: 212 }}
         source={require("./Images/logo.jpg")} 
         /> 
+
+        <View style={styles.inputView}>
+        <Text style={styles.titleTextsmall}>How Many Times Do You Want To Call/Message?</Text>
+          <TextInput
+            style={styles.TextInput}
+            value={usageLimit}
+            placeholder="Enter Your Number of Calls/Messages Here"
+            placeholderTextColor="#003f5c"
+            onChangeText={(value) => setUsageLimit(value)}
+          />
+         </View>
 
         <View style={styles.inputView}>
         <Text style={styles.titleTextsmall}>Enter Mobile Number</Text>
