@@ -36,7 +36,7 @@ const App = () => {
     const [phoneNum, setPhoneNum] = useState(undefined);
     const [message, setMessage] = useState(undefined);
     const [contacts, setContacts] = useState([]);
-    const [usageLimit, setUsageLimit] = useState([]);
+    const [usageLimit, setUsageLimit] = useState(1);
 
     /*
     The messaging function uses:
