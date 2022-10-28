@@ -19,6 +19,8 @@ import {
 Components:
 - DogEm title text
 - DogEm photo
+- "Enter number of messages" prompt
+- Field for number of messages
 - "Enter mobile number" prompt
 - Field for numbers or emails
 - "Add contact" button, which adds the numbers/emails to the contacts array
