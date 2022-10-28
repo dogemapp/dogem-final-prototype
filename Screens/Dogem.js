@@ -19,8 +19,6 @@ import {
 Components:
 - DogEm title text
 - DogEm photo
-- "Enter number of messages" prompt
-- Field for number of messages
 - "Enter mobile number" prompt
 - Field for numbers or emails
 - "Add contact" button, which adds the numbers/emails to the contacts array
@@ -36,7 +34,7 @@ const App = () => {
     const [phoneNum, setPhoneNum] = useState(undefined);
     const [message, setMessage] = useState(undefined);
     const [contacts, setContacts] = useState([]);
-    const [usageLimit, setUsageLimit] = useState(1);
+    const [usageLimit, setUsageLimit] = useState([]);
 
     /*
     The messaging function uses:
@@ -160,7 +158,7 @@ const App = () => {
             placeholderTextColor="#003f5c"
             onChangeText={(value) => setPhoneNum(value)}
           />
-        <Text style={styles.forgot_button} onPress={addContact}>Add Contact</Text>
+        <Text style={styles.contact_ops_button} onPress={addContact}>Add Contact</Text>
         </View>
   
         <View style={styles.inputView}>
@@ -173,10 +171,10 @@ const App = () => {
             onChangeText={(value) => setMessage(value)}
           />
          </View>
-
+        
          <Text>Contacts:</Text>
          {showContacts()}
-         <Text style={styles.forgot_button} onPress={() => setContacts([])}>Clear Contacts</Text>
+         <Text style={styles.contact_ops_button} onPress={() => setContacts([])}>Clear Contacts</Text>
         
          <TouchableOpacity
                     activeOpacity={0.7}
@@ -238,6 +236,13 @@ const App = () => {
       height: 30,
       marginTop: 10,
       marginBottom: 20,
+    },
+
+    contact_ops_button: {
+      height: 30,
+      color: '#1035AC',
+      marginTop: 10,
+      textDecorationLine: 'underline',
     },
   
     edit_contact_button: {
