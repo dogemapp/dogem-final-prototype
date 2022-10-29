@@ -118,17 +118,21 @@ const App = () => {
       });
     };
   
-     /* 
+    /* 
     The calling function uses the following:
     1. _pressCall: Opens the user's default calling app using Linking
        and calls the number that the user entered into the "Enter Mobile Number"
-       field.
+       field. It uses the setInterval() method, which opens the calling app
+       every 5 seconds (5000 milliseconds). 
     2. addContact
     3. showContacts
     */ 
-  const _pressCall = () => {
-        Linking.openURL(`tel:${contacts}`);
-    }
+    const _pressCall = () => {
+    const interval = setInterval(() => {
+      Linking.openURL(`tel:${contacts}`);
+      }, 5000);
+      return () => clearInterval(interval);
+    };
   
     return (
   
