@@ -15,6 +15,15 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+
+/*
+ERROR HANDLING TO-DO
+- Put an x-emoji next to each item in the contacts array [DONE]
+- when the user hits the x, delete the item [DONE]
+- set the max messaging limit to 1000 (for now)
+- create a counter that does ++ for every time it sends (message/call)
+*/
+
 /*CODE FOR THE DOGEM SCREEN
 Components:
 - DogEm title text
@@ -101,12 +110,23 @@ const App = () => {
       setPhoneNum(undefined);
     };
 
-    /*
-    showContacts's purpose is to show what the user entered in the field
+    /* Delete contact */
+    const deleteContact = index => {
+      const newContactsList = [...contacts];
+      newContactsList.splice(index, 1);
+      setContacts(newContactsList);
+  };
+
+
+    
+   /* showContacts's purpose is to show what the user entered in the field
     corresponding with contact info. 
     1. If nothing is entered, it shows that no contacts were added.
     2. It displays them using .map, which is a method for displaying/traversing
        a component's similar objects.
+    3. The map displays the contact and an 'x' button beside each contact. 
+       The 'x' button can be used to delete the individial contact from the
+       contacts array. 
     */
     const showContacts = () => {
       if (contacts.length === 0) {
@@ -114,11 +134,13 @@ const App = () => {
       }
   
       return contacts.map((contact, index) => {
-        return <Text key={index}>{contact}</Text>;
+        return <Text key={index}>{contact} 
+        <Button title = "x" onPress={() => deleteContact(index)}/></Text>;
       });
     };
+    
   
-    /* 
+     /* 
     The calling function uses the following:
     1. _pressCall: Opens the user's default calling app using Linking
        and calls the number that the user entered into the "Enter Mobile Number"
@@ -127,7 +149,7 @@ const App = () => {
     2. addContact
     3. showContacts
     */ 
-    const _pressCall = () => {
+  const _pressCall = () => {
     const interval = setInterval(() => {
       Linking.openURL(`tel:${contacts}`);
       }, 5000);
@@ -135,7 +157,6 @@ const App = () => {
     };
   
     return (
-  
       <View style={styles.container}>
       <ScrollView>
         <Text style={styles.titleText}> DogEm </Text>
