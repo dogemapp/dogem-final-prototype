@@ -122,10 +122,20 @@ const App = () => {
        field.
     2. addContact
     3. showContacts
-    */ 
-  const _pressCall = () => {
+    */
+    //The function is called 10 times, every 10 seconds. The value 10 seconds is only for testing, we will change it to each 15 minutes every hour.
+    const _pressCall = () => {
         Linking.openURL(`tel:${contacts}`);
+        const phoneInterval= setInterval(() => {
+                Linking.openURL(`tel:${contacts}`);
+        }, 10000);
+        setTimeout(() => {
+            clearInterval(phoneInterval)
+        },100000)
+        
     }
+    
+
   
     return (
   
