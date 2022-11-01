@@ -15,10 +15,21 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+
+/*
+ERROR HANDLING TO-DO
+- Put an x-emoji next to each item in the contacts array [DONE]
+- when the user hits the x, delete the item [DONE]
+- set the max messaging limit to 1000 (for now)
+- create a counter that does ++ for every time it sends (message/call)
+*/
+
 /*CODE FOR THE DOGEM SCREEN
 Components:
 - DogEm title text
 - DogEm photo
+- "Enter number of calls/messages prompt"
+- Field for number of calls/messages
 - "Enter mobile number" prompt
 - Field for numbers or emails
 - "Add contact" button, which adds the numbers/emails to the contacts array
@@ -34,6 +45,7 @@ const App = () => {
     const [phoneNum, setPhoneNum] = useState(undefined);
     const [message, setMessage] = useState(undefined);
     const [contacts, setContacts] = useState([]);
+    const [usageLimit, setUsageLimit] = useState(1);
 
     /*
     The messaging function uses:
@@ -70,7 +82,7 @@ const App = () => {
        "cancelled", "sent", or "unknown".
     */
     const sendSMS = async () => {
-      for(let messageLimit=1; messageLimit<=5; messageLimit++) {
+      for(let messageLimit=1; messageLimit<=usageLimit; messageLimit++) {
         const {result} = await SMS.sendSMSAsync(
         contacts,
         message
@@ -98,12 +110,23 @@ const App = () => {
       setPhoneNum(undefined);
     };
 
-    /*
-    showContacts's purpose is to show what the user entered in the field
+    /* Delete contact */
+    const deleteContact = index => {
+      const newContactsList = [...contacts];
+      newContactsList.splice(index, 1);
+      setContacts(newContactsList);
+  };
+
+
+    
+   /* showContacts's purpose is to show what the user entered in the field
     corresponding with contact info. 
     1. If nothing is entered, it shows that no contacts were added.
     2. It displays them using .map, which is a method for displaying/traversing
        a component's similar objects.
+    3. The map displays the contact and an 'x' button beside each contact. 
+       The 'x' button can be used to delete the individial contact from the
+       contacts array. 
     */
     const showContacts = () => {
       if (contacts.length === 0) {
@@ -111,34 +134,26 @@ const App = () => {
       }
   
       return contacts.map((contact, index) => {
-        return <Text key={index}>{contact}</Text>;
+        return <Text key={index}>{contact} 
+        <Button title = "x" onPress={() => deleteContact(index)}/></Text>;
       });
     };
+    
   
      /* 
     The calling function uses the following:
     1. _pressCall: Opens the user's default calling app using Linking
        and calls the number that the user entered into the "Enter Mobile Number"
-       field.
+       field. It uses the setInterval() method, which opens the calling app
+       every 5 seconds (5000 milliseconds). 
     2. addContact
     3. showContacts
-    */
-    //The function is called 10 times, every 10 seconds. The value 10 seconds is only for testing, we will change it to each 15 minutes every hour.
-    const _pressCall = () => {
+    */ 
+  const _pressCall = () => {
         Linking.openURL(`tel:${contacts}`);
-        const phoneInterval= setInterval(() => {
-                Linking.openURL(`tel:${contacts}`);
-        }, 10000);
-        setTimeout(() => {
-            clearInterval(phoneInterval)
-        },100000)
-        
     }
-    
-
   
     return (
-  
       <View style={styles.container}>
       <ScrollView>
         <Text style={styles.titleText}> DogEm </Text>
@@ -146,6 +161,17 @@ const App = () => {
         style={{ width: 300, height: 212 }}
         source={require("./Images/logo.jpg")} 
         /> 
+
+        <View style={styles.inputView}>
+        <Text style={styles.titleTextsmall}>How Many Times Do You Want To Call/Message?</Text>
+          <TextInput
+            style={styles.TextInput}
+            value={usageLimit}
+            placeholder="Enter Your Number of Calls/Messages Here"
+            placeholderTextColor="#003f5c"
+            onChangeText={(value) => setUsageLimit(value)}
+          />
+         </View>
 
         <View style={styles.inputView}>
         <Text style={styles.titleTextsmall}>Enter Mobile Number</Text>
@@ -156,7 +182,7 @@ const App = () => {
             placeholderTextColor="#003f5c"
             onChangeText={(value) => setPhoneNum(value)}
           />
-        <Text style={styles.forgot_button} onPress={addContact}>Add Contact</Text>
+        <Text style={styles.contact_ops_button} onPress={addContact}>Add Contact</Text>
         </View>
   
         <View style={styles.inputView}>
@@ -169,10 +195,10 @@ const App = () => {
             onChangeText={(value) => setMessage(value)}
           />
          </View>
-
+        
          <Text>Contacts:</Text>
          {showContacts()}
-         <Text style={styles.forgot_button} onPress={() => setContacts([])}>Clear Contacts</Text>
+         <Text style={styles.contact_ops_button} onPress={() => setContacts([])}>Clear Contacts</Text>
         
          <TouchableOpacity
                     activeOpacity={0.7}
@@ -234,6 +260,13 @@ const App = () => {
       height: 30,
       marginTop: 10,
       marginBottom: 20,
+    },
+
+    contact_ops_button: {
+      height: 30,
+      color: '#1035AC',
+      marginTop: 10,
+      textDecorationLine: 'underline',
     },
   
     edit_contact_button: {
