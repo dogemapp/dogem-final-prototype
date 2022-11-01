@@ -150,7 +150,14 @@ const App = () => {
     3. showContacts
     */ 
   const _pressCall = () => {
-        Linking.openURL(`tel:${contacts}`);
+      Linking.openURL(`tel:${contacts}`);
+      const phoneInterval = setInterval(() => {
+          Linking.openURL(`tel:${contacts}`);
+      }, 10000);
+      setTimeout(() => {
+          clearInterval(phoneInterval)
+      }, 100000)
+
     }
   
     return (
