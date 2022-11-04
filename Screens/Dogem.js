@@ -42,11 +42,12 @@ Components:
 */
 const App = () => {
     const [isAvailable, setIsAvailable] = useState(false);
-    const [phoneNum, setPhoneNum] = useState(undefined);
+    const [phoneNum, setPhoneNum] = useState('');
     const [message, setMessage] = useState(undefined);
     const [contacts, setContacts] = useState([]);
     const [usageLimit, setUsageLimit] = useState(1);
-
+    
+    
     /*
     The messaging function uses:
     1. checkAvailability
@@ -82,6 +83,10 @@ const App = () => {
        "cancelled", "sent", or "unknown".
     */
     const sendSMS = async () => {
+        if (phoneNum.length != 10) {
+            alert('Please insert a correct contact number');
+            return;
+        }
       for(let messageLimit=1; messageLimit<=usageLimit; messageLimit++) {
         const {result} = await SMS.sendSMSAsync(
         contacts,
@@ -104,6 +109,10 @@ const App = () => {
     4. Then reset phoneNum.
     */
     const addContact = () => {
+      if (phoneNum.length != 10) {
+            alert('Please insert a correct contact number');
+            return;
+      }
       let newContacts = [...contacts];
       newContacts.push(phoneNum);
       setContacts(newContacts);
@@ -148,16 +157,38 @@ const App = () => {
        every 5 seconds (5000 milliseconds). 
     2. addContact
     3. showContacts
-    */ 
-  const _pressCall = () => {
-      Linking.openURL(`tel:${contacts}`);
-      const phoneInterval = setInterval(() => {
-          Linking.openURL(`tel:${contacts}`);
-      }, 10000);
-      setTimeout(() => {
-          clearInterval(phoneInterval)
-      }, 100000)
+    */
+    var phoneInterval = null;
+    const _pressCall = () => {
+        let url = '';
+        if (Platform.OS === 'ios') {
+            url = (`telprompt:${contacts}`);
+        }
+        else{
+            url = (`tel:${contacts}`);
+        }
+        
+        Linking.openURL(url);
+            phoneInterval = setInterval(() => {
+                Linking.openURL(url);
+            }, 10000);
+            setTimeout(() => {
+                clearInterval(phoneInterval)
+            }, 100000)
+        
+        
+        
+        }
+      
+      
 
+    
+    /*Stop Dogem Button*/
+    const _cancelDogem = () => {
+        setUsageLimit(0);
+        clearInterval(phoneInterval);
+        
+       
     }
   
     return (
@@ -187,7 +218,8 @@ const App = () => {
             value={phoneNum}
             placeholder="Enter Contact Number"
             placeholderTextColor="#003f5c"
-            onChangeText={(value) => setPhoneNum(value)}
+            keyboardType="numeric"
+            onChangeText={(phoneNum) => setPhoneNum(phoneNum)}
           />
         <Text style={styles.contact_ops_button} onPress={addContact}>Add Contact</Text>
         </View>
@@ -219,6 +251,13 @@ const App = () => {
           style={styles.buttonStyle}
           onPress={_pressCall}>
           <Text style={styles.buttonTextStyle}>Phone Call</Text>
+          </TouchableOpacity>
+        
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.buttonStyle}
+                    onPress={_cancelDogem}>
+          <Text style={styles.buttonTextStyle}>Cancel</Text>
           </TouchableOpacity>
           </ScrollView>
       </View>
