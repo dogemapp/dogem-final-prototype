@@ -83,10 +83,6 @@ const App = () => {
        "cancelled", "sent", or "unknown".
     */
     const sendSMS = async () => {
-        if (phoneNum.length != 10) {
-            alert('Please insert a correct contact number');
-            return;
-        }
       for(let messageLimit=1; messageLimit<=usageLimit; messageLimit++) {
         const {result} = await SMS.sendSMSAsync(
         contacts,
