@@ -215,7 +215,7 @@ const App = () => {
             placeholder="Enter Contact Number"
             placeholderTextColor="#003f5c"
             keyboardType="numeric"
-            onChangeText={(phoneNum) => setPhoneNum(phoneNum)}
+            onChangeText={(value) => setPhoneNum(value)}
           />
         <Text style={styles.contact_ops_button} onPress={addContact}>Add Contact</Text>
         </View>
