@@ -1,5 +1,5 @@
 // JavaScript source code
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import {
     StyleSheet,
@@ -9,25 +9,38 @@ import {
     Button,
     TouchableOpacity,
     Image,
+    Alert,
+    Keyboard,
 } from "react-native";
+import { signInWithEmailAndPassword} from "firebase/auth";
+import { auth } from './Database_config/Firebase';
 
-const App = ({navigation })=> {
-    const [username, setUsername] = useState('');
+const App = ({navigation})=> {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const handleLogin = () =>{
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredentials) =>{
+                // Signed in
+                const user = userCredentials.user;
+                navigation.replace('Login')
+            })
+            .catch((error) => Alert.alert("Login Failed", "Invalid Credentials"))
+            //.catch((error) => alert(error.message))
+    }
     return (
-
         <View style={styles.container}>
         <Image 
         style={{ width: 193, height: 218, marginBottom: 5 }}
         source={require("./Images/mergeddogemtransparent.png")} 
         />
             
-            <View style={styles.inputView}>
+            <View style={styles.inputView_email}>
                 <TextInput
                     style={styles.TextInput}
-                    placeholder="Username"
-                    onChangeText={(username) => setUsername(username)}
+                    placeholder="Example@email.com"
+                    onChangeText={(email) => setEmail(email)}
                 />
             </View>
 
@@ -47,13 +60,14 @@ const App = ({navigation })=> {
                 <Text style={styles.forgot_button}>Don't have an account ? Register</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
         </View>
     );
 }
 export default App;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -63,9 +77,16 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        marginBottom: 40,
+        marginBottom: 100,
     },
-
+    inputView_email: {
+        backgroundColor: "#FFFFFF",
+        width: "70%",
+        height: 45,
+        marginBottom: 20,
+        marginTop: 25,
+        alignItems: "center",
+    }, 
     inputView: {
         backgroundColor: "#FFFFFF",
         width: "70%",

@@ -8,6 +8,8 @@ import HomeScreen from './Screens/Home'
 import DogemScreen from './Screens/Dogem'
 import ContactScreen from './Screens/Contact'
 import RegisterScreen from './Screens/Register'
+import { signOut } from 'firebase/auth';
+
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
@@ -29,11 +31,12 @@ const MyStack = () => {
                         headerStyle: {
                           backgroundColor: '',
                         },
+                        headerLeft: null ,
                         headerRight: () => (
                           <View style={{marginHorizontal: -10, flexDirection: "row"}}>
                            <Button
-                             title="Logout" //Header Button to Logout
-                             onPress={() => navigation.navigate('Home')}   
+                             title="Add Contact" //Header Button
+                             onPress={() => navigation.navigate('Contact')}   
                             />
                           </View>
                         )  
@@ -41,7 +44,6 @@ const MyStack = () => {
                 />
                 <Stack.Screen name="Dogem" component={DogemScreen} options={{title:'Dogem'} }/>
                 <Stack.Screen name="Contact" component={ContactScreen} options={{title:'Contact'} }/>
-                
             </Stack.Navigator>
         </NavigationContainer>
     );
