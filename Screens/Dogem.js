@@ -5,6 +5,7 @@ import * as SMS from 'expo-sms';
 import {
   StyleSheet,
   StatusBar,
+  Alert,
   Text,
   View,
   Image,
@@ -106,7 +107,7 @@ const App = () => {
     */
     const addContact = () => {
       if (phoneNum.length != 10) {
-            alert('Please insert a correct contact number');
+            Alert.alert('Error','Please insert a correct contact number');
             return;
       }
       let newContacts = [...contacts];

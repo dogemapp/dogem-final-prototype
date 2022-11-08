@@ -25,7 +25,7 @@ const Login = ({ navigation }) => {
                 // Signed Out
                 navigation.replace('Home')
             })
-            .catch((error) => alert(error.message))
+            .catch((error) => Alert.alert("Error Occured", error.message))
     }
     return (
         <View style={styles.container}>

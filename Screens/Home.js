@@ -9,6 +9,8 @@ import {
     Button,
     TouchableOpacity,
     Image,
+    Alert,
+    Keyboard,
 } from "react-native";
 import { signInWithEmailAndPassword} from "firebase/auth";
 import { auth } from './Database_config/Firebase';
@@ -24,19 +26,17 @@ const App = ({navigation})=> {
                 const user = userCredentials.user;
                 navigation.replace('Login')
             })
-            .catch((error) => alert("Login Failed : Incorrect Email and Password"))
+            .catch((error) => Alert.alert("Login Failed", "Invalid Credentials"))
             //.catch((error) => alert(error.message))
     }
-
     return (
-
         <View style={styles.container}>
         <Image 
         style={{ width: 193, height: 218, marginBottom: 5 }}
         source={require("./Images/mergeddogemtransparent.png")} 
         />
             
-            <View style={styles.inputView}>
+            <View style={styles.inputView_email}>
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Example@email.com"
@@ -77,9 +77,16 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        marginBottom: 40,
+        marginBottom: 100,
     },
-
+    inputView_email: {
+        backgroundColor: "#FFFFFF",
+        width: "70%",
+        height: 45,
+        marginBottom: 20,
+        marginTop: 25,
+        alignItems: "center",
+    }, 
     inputView: {
         backgroundColor: "#FFFFFF",
         width: "70%",
