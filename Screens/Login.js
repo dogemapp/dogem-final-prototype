@@ -55,6 +55,9 @@ const Login = ({ navigation }) => {
                     <Text style={styles.dogText}>DOGEM</Text>
                 </TouchableOpacity>
 
+             <TouchableOpacity style = {styles.editBtn} onPress={() => navigation.navigate('EditProfile')}>
+              <Text style={styles.dogText}>Edit Profile</Text>
+            </TouchableOpacity>
             
                 <TouchableOpacity style={styles.logOutBtn} onPress={handleLogOut}>
                     <Text style={styles.logOutText}>LOGOUT</Text>
@@ -84,6 +87,17 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         color: '#000080',
+    },
+    editBtn: {
+        width: "50%",
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 40,
+        marginLeft: 90,
+        backgroundColor: "#1035AC",
+        borderRadius: 5
+
     },
     DogemBtn: {
         width: "50%",
