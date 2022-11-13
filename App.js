@@ -8,6 +8,7 @@ import HomeScreen from './Screens/Home'
 import DogemScreen from './Screens/Dogem'
 import ContactScreen from './Screens/Contact'
 import RegisterScreen from './Screens/Register'
+import OnboardingScreen from './Screens/Onboarding'
 import { signOut } from 'firebase/auth';
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,7 @@ const MyStack = () => {
                     options={{headerShown:false}}
                     />
                 <Stack.Screen name="Register" component={RegisterScreen} options={{title:'Register'} }/>
+                <Stack.Screen name="Onboard" component={OnboardingScreen} options={{headerShown:false}} />
                 <Stack.Screen
                     name="Login"
                     component={LoginScreen}

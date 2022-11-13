@@ -24,7 +24,8 @@ const App = ({navigation})=> {
             .then((userCredentials) =>{
                 // Signed in
                 const user = userCredentials.user;
-                navigation.replace('Login')
+                // navigation.replace('Login')
+                navigation.replace('Onboard')
             })
             .catch((error) => Alert.alert("Login Failed", "Invalid Credentials"))
             //.catch((error) => alert(error.message))
