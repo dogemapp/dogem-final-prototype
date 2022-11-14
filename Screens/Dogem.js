@@ -17,13 +17,6 @@ import {
   Platform,
 } from 'react-native';
 
-/*
-ERROR HANDLING TO-DO
-- Put an x-emoji next to each item in the contacts array [DONE]
-- when the user hits the x, delete the item [DONE]
-- set the max messaging limit to 1000 (for now)
-- create a counter that does ++ for every time it sends (message/call)
-*/
 
 /*CODE FOR THE DOGEM SCREEN
 Components:
@@ -151,7 +144,7 @@ const App = () => {
     1. _pressCall: Opens the user's default calling app using Linking
        and calls the number that the user entered into the "Enter Mobile Number"
        field. It uses the setInterval() method, which opens the calling app
-       every 5 seconds (5000 milliseconds). 
+       every 10 seconds (10,000 milliseconds). It also clears the phone interval. 
     2. addContact
     3. showContacts
     */

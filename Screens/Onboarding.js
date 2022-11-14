@@ -1,15 +1,20 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity, ScrollView, } from 'react-native';
 import YoutubePlayer from "react-native-youtube-iframe";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from './Database_config/Firebase';
+import { collection, getDoc, doc, addDoc} from "firebase/firestore"; 
+import { db } from './Database_config/Firebase'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { async } from '@firebase/util';
 
 //TODO: implement a check if video is in background in order to upload to google play store  (This might already happen automatically)
-//more details: https://lonelycpp.github.io/react-native-youtube-iframe/play-store-compatibility
 
 const Onboard = ({navigation}) => {
 
   //Play/Pause button functionality
   const [playing, setPlaying] = useState(false);
+
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
       setPlaying(false);
@@ -19,6 +24,18 @@ const Onboard = ({navigation}) => {
     setPlaying((prev) => !prev);
   }, []);
   
+  /* The following code retrieves the current user's email */
+  const email = auth.currentUser.email
+  const userDocRef = doc(db,"user", email)
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    const getUser = async () => {
+      const snap = await getDoc(userDocRef)
+      setUser({email, ...snap.data()})
+    }
+    getUser()
+  },[])
   
   return (
 
@@ -26,12 +43,16 @@ const Onboard = ({navigation}) => {
     // in this case it is oversized purposefully becuase it is a portrait video
 
     <View style={styles.container}>
-
-      <Text style={styles.titleText}>DogEm Guide</Text>
+      <Text></Text>
+      <Text style={styles.onboardTitleText}>Welcome</Text>
+      <Text style={styles.onboardTitleText}>to</Text>
+      <Text style={styles.onboardTitleText}>DogEm,</Text>
+      <Text style={styles.onboardTitleText}>{user.email}</Text>
+      <Text></Text>
       
       <YoutubePlayer
-        height={400}
-        width={700}
+        height={200}
+        width={355}
         play={playing}
         videoId={"f-gRv5Day8M"}
         onChangeState={onStateChange}
@@ -43,7 +64,6 @@ const Onboard = ({navigation}) => {
       <TouchableOpacity style={styles.skipBtn} onPress={() => navigation.replace('Login')}>   
           <Text style={styles.skipText}>SKIP</Text>
       </TouchableOpacity>
-
     </View>
 
     );
@@ -58,10 +78,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    titleText: {
-      marginTop: 75,
-      marginBottom: 50,
-      fontSize: 35,
+    onboardTitleText: {
+      marginTop: 5,
+      fontSize: 25,
       textAlign: 'center',
       fontWeight: 'bold',
       color: '#000080',
